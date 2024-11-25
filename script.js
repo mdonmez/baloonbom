@@ -16,12 +16,18 @@ function createBalloon() {
     balloon.style.filter = `hue-rotate(${Math.random() * 360}deg)`;
     balloon.style.left = Math.random() * (window.innerWidth - 50) + 'px';
     
-    balloon.addEventListener('click', () => {
+    const handleClick = () => {
         if (!gameActive) return;
         score++;
         document.getElementById('score').textContent = score;
         balloon.classList.add('pop-effect');
         setTimeout(() => balloon.remove(), 300);
+    };
+
+    balloon.addEventListener('click', handleClick);
+    balloon.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        handleClick();
     });
 
     document.getElementById('game-area').appendChild(balloon);
@@ -38,6 +44,10 @@ function updateTimer() {
         location.reload();
     }
 }
+
+// Prevent scrolling and zooming on mobile
+document.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
+document.addEventListener('gesturestart', (e) => e.preventDefault());
 
 // Start game
 setInterval(createBalloon, 500); // Creates 2 balloons per second
